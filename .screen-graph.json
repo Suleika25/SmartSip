@@ -200,15 +200,31 @@
       }
     },
     {
-      "id": "src\\screens\\AIRecommendationResult\\AIRecommendationResult.tsx:77:27-to-src\\screens\\AIRecommendationStep2\\AIRecommendationStep2.tsx",
+      "id": "src\\screens\\AIRecommendationResult\\AIRecommendationResult.tsx:88:6-to-src\\screens\\AIRecommendation\\AIRecommendation.tsx",
+      "source": "src\\screens\\AIRecommendationResult\\AIRecommendationResult.tsx",
+      "target": "src\\screens\\AIRecommendation\\AIRecommendation.tsx",
+      "data": {
+        "viaRoute": "/ai-recommendation",
+        "trigger": {
+          "element": "navigate(\"/ai-recommendation\")",
+          "line": 88,
+          "endLine": 88,
+          "column": 6,
+          "endColumn": 36,
+          "sourceFile": "src\\screens\\AIRecommendationResult\\AIRecommendationResult.tsx"
+        }
+      }
+    },
+    {
+      "id": "src\\screens\\AIRecommendationResult\\AIRecommendationResult.tsx:106:27-to-src\\screens\\AIRecommendationStep2\\AIRecommendationStep2.tsx",
       "source": "src\\screens\\AIRecommendationResult\\AIRecommendationResult.tsx",
       "target": "src\\screens\\AIRecommendationStep2\\AIRecommendationStep2.tsx",
       "data": {
         "viaRoute": "/ai-recommendation-step2",
         "trigger": {
           "element": "navigate(\"/ai-recommendation-step2\")",
-          "line": 77,
-          "endLine": 77,
+          "line": 106,
+          "endLine": 106,
           "column": 27,
           "endColumn": 63,
           "sourceFile": "src\\screens\\AIRecommendationResult\\AIRecommendationResult.tsx"
@@ -216,33 +232,17 @@
       }
     },
     {
-      "id": "src\\screens\\AIRecommendationResult\\AIRecommendationResult.tsx:100:18-to-src\\screens\\CocktailDetail\\CocktailDetail.tsx",
+      "id": "src\\screens\\AIRecommendationResult\\AIRecommendationResult.tsx:129:18-to-src\\screens\\CocktailDetail\\CocktailDetail.tsx",
       "source": "src\\screens\\AIRecommendationResult\\AIRecommendationResult.tsx",
       "target": "src\\screens\\CocktailDetail\\CocktailDetail.tsx",
       "data": {
         "viaRoute": "/cocktail-detail",
         "trigger": {
           "element": "navigate(\"/cocktail-detail\")",
-          "line": 100,
-          "endLine": 100,
+          "line": 129,
+          "endLine": 129,
           "column": 18,
           "endColumn": 46,
-          "sourceFile": "src\\screens\\AIRecommendationResult\\AIRecommendationResult.tsx"
-        }
-      }
-    },
-    {
-      "id": "src\\screens\\AIRecommendationResult\\AIRecommendationResult.tsx:111:14-to-src\\screens\\AIRecommendation\\AIRecommendation.tsx",
-      "source": "src\\screens\\AIRecommendationResult\\AIRecommendationResult.tsx",
-      "target": "src\\screens\\AIRecommendation\\AIRecommendation.tsx",
-      "data": {
-        "viaRoute": "/ai-recommendation",
-        "trigger": {
-          "element": "navigate(\"/ai-recommendation\")",
-          "line": 111,
-          "endLine": 111,
-          "column": 14,
-          "endColumn": 44,
           "sourceFile": "src\\screens\\AIRecommendationResult\\AIRecommendationResult.tsx"
         }
       }
