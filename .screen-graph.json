@@ -1,0 +1,251 @@
+{
+  "nodes": [
+    {
+      "id": "src/screens/Home/Home.tsx",
+      "label": "Home",
+      "routes": [
+        "/"
+      ],
+      "isRoot": true
+    },
+    {
+      "id": "src/screens/Menu/Menu.tsx",
+      "label": "Menu",
+      "routes": [
+        "/menu"
+      ]
+    },
+    {
+      "id": "src/screens/Cocktails/Cocktails.tsx",
+      "label": "Cocktails",
+      "routes": [
+        "/cocktails"
+      ]
+    },
+    {
+      "id": "src/screens/CocktailDetail/CocktailDetail.tsx",
+      "label": "CocktailDetail",
+      "routes": [
+        "/cocktail-detail"
+      ]
+    },
+    {
+      "id": "src/screens/Beer/Beer.tsx",
+      "label": "Beer",
+      "routes": [
+        "/beer"
+      ]
+    },
+    {
+      "id": "src/screens/Wine/Wine.tsx",
+      "label": "Wine",
+      "routes": [
+        "/wine"
+      ]
+    },
+    {
+      "id": "src/screens/Spirits/Spirits.tsx",
+      "label": "Spirits",
+      "routes": [
+        "/spirits"
+      ]
+    },
+    {
+      "id": "src/screens/SoftDrinks/SoftDrinks.tsx",
+      "label": "SoftDrinks",
+      "routes": [
+        "/soft-drinks"
+      ]
+    },
+    {
+      "id": "src/screens/HotDrinks/HotDrinks.tsx",
+      "label": "HotDrinks",
+      "routes": [
+        "/hot-drinks"
+      ]
+    },
+    {
+      "id": "src/screens/AIRecommendation/AIRecommendation.tsx",
+      "label": "AIRecommendation",
+      "routes": [
+        "/ai-recommendation"
+      ]
+    },
+    {
+      "id": "src/screens/AIRecommendationStep2/AIRecommendationStep2.tsx",
+      "label": "AIRecommendationStep2",
+      "routes": [
+        "/ai-recommendation-step2"
+      ]
+    },
+    {
+      "id": "src/screens/AIRecommendationResult/AIRecommendationResult.tsx",
+      "label": "AIRecommendationResult",
+      "routes": [
+        "/ai-recommendation-result"
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "id": "src\\screens\\Cocktails\\Cocktails.tsx:98:49-to-src\\screens\\Menu\\Menu.tsx",
+      "source": "src\\screens\\Cocktails\\Cocktails.tsx",
+      "target": "src\\screens\\Menu\\Menu.tsx",
+      "data": {
+        "viaRoute": "/menu",
+        "trigger": {
+          "element": "navigate('/menu')",
+          "line": 98,
+          "endLine": 98,
+          "column": 49,
+          "endColumn": 66,
+          "sourceFile": "src\\screens\\Cocktails\\Cocktails.tsx"
+        }
+      }
+    },
+    {
+      "id": "src\\screens\\Cocktails\\Cocktails.tsx:144:22-to-src\\screens\\CocktailDetail\\CocktailDetail.tsx",
+      "source": "src\\screens\\Cocktails\\Cocktails.tsx",
+      "target": "src\\screens\\CocktailDetail\\CocktailDetail.tsx",
+      "data": {
+        "viaRoute": "/cocktail-detail",
+        "trigger": {
+          "element": "navigate('/cocktail-detail')",
+          "line": 144,
+          "endLine": 144,
+          "column": 22,
+          "endColumn": 50,
+          "sourceFile": "src\\screens\\Cocktails\\Cocktails.tsx"
+        }
+      }
+    },
+    {
+      "id": "src\\screens\\CocktailDetail\\CocktailDetail.tsx:58:25-to-src\\screens\\AIRecommendation\\AIRecommendation.tsx",
+      "source": "src\\screens\\CocktailDetail\\CocktailDetail.tsx",
+      "target": "src\\screens\\AIRecommendation\\AIRecommendation.tsx",
+      "data": {
+        "viaRoute": "/ai-recommendation",
+        "trigger": {
+          "element": "navigate('/ai-recommendation')",
+          "line": 58,
+          "endLine": 58,
+          "column": 25,
+          "endColumn": 55,
+          "sourceFile": "src\\screens\\CocktailDetail\\CocktailDetail.tsx"
+        }
+      }
+    },
+    {
+      "id": "src\\screens\\AIRecommendation\\AIRecommendation.tsx:45:12-to-src\\screens\\AIRecommendationStep2\\AIRecommendationStep2.tsx",
+      "source": "src\\screens\\AIRecommendation\\AIRecommendation.tsx",
+      "target": "src\\screens\\AIRecommendationStep2\\AIRecommendationStep2.tsx",
+      "data": {
+        "viaRoute": "/ai-recommendation-step2",
+        "trigger": {
+          "element": "navigate(\"/ai-recommendation-step2\")",
+          "line": 45,
+          "endLine": 45,
+          "column": 12,
+          "endColumn": 48,
+          "sourceFile": "src\\screens\\AIRecommendation\\AIRecommendation.tsx"
+        }
+      }
+    },
+    {
+      "id": "src\\screens\\AIRecommendation\\AIRecommendation.tsx:78:25-to-src\\screens\\Home\\Home.tsx",
+      "source": "src\\screens\\AIRecommendation\\AIRecommendation.tsx",
+      "target": "src\\screens\\Home\\Home.tsx",
+      "data": {
+        "viaRoute": "/",
+        "trigger": {
+          "element": "navigate(\"/\")",
+          "line": 78,
+          "endLine": 78,
+          "column": 25,
+          "endColumn": 38,
+          "sourceFile": "src\\screens\\AIRecommendation\\AIRecommendation.tsx"
+        }
+      }
+    },
+    {
+      "id": "src\\screens\\AIRecommendationStep2\\AIRecommendationStep2.tsx:27:12-to-src\\screens\\AIRecommendationResult\\AIRecommendationResult.tsx",
+      "source": "src\\screens\\AIRecommendationStep2\\AIRecommendationStep2.tsx",
+      "target": "src\\screens\\AIRecommendationResult\\AIRecommendationResult.tsx",
+      "data": {
+        "viaRoute": "/ai-recommendation-result",
+        "trigger": {
+          "element": "navigate(\"/ai-recommendation-result\")",
+          "line": 27,
+          "endLine": 27,
+          "column": 12,
+          "endColumn": 49,
+          "sourceFile": "src\\screens\\AIRecommendationStep2\\AIRecommendationStep2.tsx"
+        }
+      }
+    },
+    {
+      "id": "src\\screens\\AIRecommendationStep2\\AIRecommendationStep2.tsx:88:12-to-src\\screens\\AIRecommendation\\AIRecommendation.tsx",
+      "source": "src\\screens\\AIRecommendationStep2\\AIRecommendationStep2.tsx",
+      "target": "src\\screens\\AIRecommendation\\AIRecommendation.tsx",
+      "data": {
+        "viaRoute": "/ai-recommendation",
+        "trigger": {
+          "element": "navigate(\"/ai-recommendation\")",
+          "line": 88,
+          "endLine": 88,
+          "column": 12,
+          "endColumn": 42,
+          "sourceFile": "src\\screens\\AIRecommendationStep2\\AIRecommendationStep2.tsx"
+        }
+      }
+    },
+    {
+      "id": "src\\screens\\AIRecommendationResult\\AIRecommendationResult.tsx:77:27-to-src\\screens\\AIRecommendationStep2\\AIRecommendationStep2.tsx",
+      "source": "src\\screens\\AIRecommendationResult\\AIRecommendationResult.tsx",
+      "target": "src\\screens\\AIRecommendationStep2\\AIRecommendationStep2.tsx",
+      "data": {
+        "viaRoute": "/ai-recommendation-step2",
+        "trigger": {
+          "element": "navigate(\"/ai-recommendation-step2\")",
+          "line": 77,
+          "endLine": 77,
+          "column": 27,
+          "endColumn": 63,
+          "sourceFile": "src\\screens\\AIRecommendationResult\\AIRecommendationResult.tsx"
+        }
+      }
+    },
+    {
+      "id": "src\\screens\\AIRecommendationResult\\AIRecommendationResult.tsx:100:18-to-src\\screens\\CocktailDetail\\CocktailDetail.tsx",
+      "source": "src\\screens\\AIRecommendationResult\\AIRecommendationResult.tsx",
+      "target": "src\\screens\\CocktailDetail\\CocktailDetail.tsx",
+      "data": {
+        "viaRoute": "/cocktail-detail",
+        "trigger": {
+          "element": "navigate(\"/cocktail-detail\")",
+          "line": 100,
+          "endLine": 100,
+          "column": 18,
+          "endColumn": 46,
+          "sourceFile": "src\\screens\\AIRecommendationResult\\AIRecommendationResult.tsx"
+        }
+      }
+    },
+    {
+      "id": "src\\screens\\AIRecommendationResult\\AIRecommendationResult.tsx:111:14-to-src\\screens\\AIRecommendation\\AIRecommendation.tsx",
+      "source": "src\\screens\\AIRecommendationResult\\AIRecommendationResult.tsx",
+      "target": "src\\screens\\AIRecommendation\\AIRecommendation.tsx",
+      "data": {
+        "viaRoute": "/ai-recommendation",
+        "trigger": {
+          "element": "navigate(\"/ai-recommendation\")",
+          "line": 111,
+          "endLine": 111,
+          "column": 14,
+          "endColumn": 44,
+          "sourceFile": "src\\screens\\AIRecommendationResult\\AIRecommendationResult.tsx"
+        }
+      }
+    }
+  ]
+}
