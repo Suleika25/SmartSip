@@ -3,6 +3,7 @@ import { ChevronLeftIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "../../components/ui/button";
 import { selectDrink } from "../../lib/selectedDrink";
+import { supabase } from "../../lib/supabase";
 
 type CatalogDrink = {
   id: string;
@@ -111,58 +112,6 @@ const groupCatalogDrinks = (drinks: CatalogDrink[]) => {
   });
 };
 
-async function loadCocktailsFromSupabase(): Promise<CatalogDrink[]> {
-  const url = import.meta.env.VITE_SUPABASE_URL;
-  const key = import.meta.env.VITE_SUPABASE_ANON_KEY;
-
-  if (!url || !key) {
-    throw new Error("Supabase ENV Variablen fehlen.");
-  }
-
-  const response = await fetch(
-    `${url}/rest/v1/drinks?category=eq.cocktail&select=*&order=section_order.asc,name.asc`,
-    {
-      headers: {
-        apikey: key,
-        Authorization: `Bearer ${key}`,
-      },
-    }
-  );
-
-  if (!response.ok) {
-    const text = await response.text();
-    throw new Error(`Supabase Fehler: ${response.status} ${text}`);
-  }
-
-  const data = await response.json();
-
-  return (data ?? []).map((drink: any) => ({
-    id: String(drink.id),
-    name: String(drink.name ?? ""),
-    section: String(drink.section ?? ""),
-    sectionOrder: Number(drink.section_order ?? 999),
-    ingredients: Array.isArray(drink.ingredients)
-      ? drink.ingredients.join(", ")
-      : String(drink.ingredients ?? ""),
-    description: String(drink.description ?? ""),
-    tags: Array.isArray(drink.tags) ? drink.tags : [],
-    price:
-      drink.price != null && drink.price !== ""
-        ? `CHF ${Number(drink.price).toFixed(2)}`
-        : "",
-    alcohol: Number(drink.alcohol ?? 0),
-    sweet: Number(drink.sweet ?? 0),
-    sour: Number(drink.sour ?? 0),
-    fruit: Number(drink.fruit ?? 0),
-    bitter: Number(drink.bitter ?? 0),
-    herb: Number(drink.herb ?? 0),
-    fresh: Number(drink.fresh ?? 0),
-    creamy: Number(drink.creamy ?? 0),
-    spicy: Number(drink.spicy ?? 0),
-    spritzig: Number(drink.spritzig ?? 0),
-  }));
-}
-
 export const Cocktails = (): JSX.Element => {
   const navigate = useNavigate();
   const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
@@ -183,11 +132,49 @@ export const Cocktails = (): JSX.Element => {
       try {
         setLoading(true);
         setError(null);
-        const drinks = await loadCocktailsFromSupabase();
-        setCocktailCatalog(drinks);
-      } catch (err) {
-        console.error(err);
-        setError("Cocktails konnten nicht aus Supabase geladen werden.");
+
+        const { data, error } = await supabase
+          .from("drinks")
+          .select("*")
+          .eq("category", "cocktail")
+          .order("name", { ascending: true });
+
+        if (error) {
+          console.error("Supabase cocktails error:", error);
+          setError(error.message);
+          return;
+        }
+
+        const mapped: CatalogDrink[] = (data ?? []).map((drink: any) => ({
+          id: String(drink.id),
+          name: String(drink.name ?? ""),
+          section: String(drink.section ?? ""),
+          sectionOrder: Number(drink.section_order ?? 999),
+          ingredients: Array.isArray(drink.ingredients)
+            ? drink.ingredients.join(", ")
+            : String(drink.ingredients ?? ""),
+          description: String(drink.description ?? ""),
+          tags: Array.isArray(drink.tags) ? drink.tags : [],
+          price:
+            drink.price != null && drink.price !== ""
+              ? `CHF ${Number(drink.price).toFixed(2)}`
+              : "",
+          alcohol: Number(drink.alcohol ?? 0),
+          sweet: Number(drink.sweet ?? 0),
+          sour: Number(drink.sour ?? 0),
+          fruit: Number(drink.fruit ?? 0),
+          bitter: Number(drink.bitter ?? 0),
+          herb: Number(drink.herb ?? 0),
+          fresh: Number(drink.fresh ?? 0),
+          creamy: Number(drink.creamy ?? 0),
+          spicy: Number(drink.spicy ?? 0),
+          spritzig: Number(drink.spritzig ?? 0),
+        }));
+
+        setCocktailCatalog(mapped);
+      } catch (err: any) {
+        console.error("Load cocktails crash:", err);
+        setError(err?.message || "Unbekannter Fehler");
       } finally {
         setLoading(false);
       }
@@ -287,4 +274,3 @@ export const Cocktails = (): JSX.Element => {
     </div>
   );
 };
-
