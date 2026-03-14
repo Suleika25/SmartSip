@@ -1,9 +1,29 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ChevronLeftIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "../../components/ui/button";
-import { cocktailCatalog, getGroupedCatalogDrinks, type CatalogDrink } from "../../data/cocktailCatalog";
 import { selectDrink } from "../../lib/selectedDrink";
+
+type CatalogDrink = {
+  id: string;
+  name: string;
+  section: string;
+  sectionOrder: number;
+  ingredients: string;
+  description: string;
+  tags: string[];
+  price: string;
+  alcohol: number;
+  sweet: number;
+  sour: number;
+  fruit: number;
+  bitter: number;
+  herb: number;
+  fresh: number;
+  creamy: number;
+  spicy: number;
+  spritzig: number;
+};
 
 const FILTER_ORDER = [
   "süss",
@@ -31,7 +51,8 @@ const filterMap: Record<string, keyof CatalogDrink> = {
   frisch: "fresh",
 };
 
-const formatIngredients = (ingredients: string) => ingredients.replace(/\s*\n\s*/g, " ").trim();
+const formatIngredients = (ingredients: string) =>
+  ingredients.replace(/\s*\n\s*/g, " ").trim();
 
 const CocktailCard = ({
   name,
@@ -74,28 +95,128 @@ const matchesFilter = (drink: CatalogDrink, filter: string) => {
   return Number(drink[key] ?? 0) >= 3;
 };
 
+const groupCatalogDrinks = (drinks: CatalogDrink[]) => {
+  const grouped = drinks.reduce<Record<string, CatalogDrink[]>>((acc, drink) => {
+    if (!acc[drink.section]) {
+      acc[drink.section] = [];
+    }
+    acc[drink.section].push(drink);
+    return acc;
+  }, {});
+
+  return Object.entries(grouped).sort((a, b) => {
+    const orderA = a[1][0]?.sectionOrder ?? 999;
+    const orderB = b[1][0]?.sectionOrder ?? 999;
+    return orderA - orderB;
+  });
+};
+
+async function loadCocktailsFromSupabase(): Promise<CatalogDrink[]> {
+  const url = import.meta.env.VITE_SUPABASE_URL;
+  const key = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+  if (!url || !key) {
+    throw new Error("Supabase ENV Variablen fehlen.");
+  }
+
+  const response = await fetch(
+    `${url}/rest/v1/drinks?category=eq.cocktail&select=*&order=section_order.asc,name.asc`,
+    {
+      headers: {
+        apikey: key,
+        Authorization: `Bearer ${key}`,
+      },
+    }
+  );
+
+  if (!response.ok) {
+    const text = await response.text();
+    throw new Error(`Supabase Fehler: ${response.status} ${text}`);
+  }
+
+  const data = await response.json();
+
+  return (data ?? []).map((drink: any) => ({
+    id: String(drink.id),
+    name: String(drink.name ?? ""),
+    section: String(drink.section ?? ""),
+    sectionOrder: Number(drink.section_order ?? 999),
+    ingredients: Array.isArray(drink.ingredients)
+      ? drink.ingredients.join(", ")
+      : String(drink.ingredients ?? ""),
+    description: String(drink.description ?? ""),
+    tags: Array.isArray(drink.tags) ? drink.tags : [],
+    price:
+      drink.price != null && drink.price !== ""
+        ? `CHF ${Number(drink.price).toFixed(2)}`
+        : "",
+    alcohol: Number(drink.alcohol ?? 0),
+    sweet: Number(drink.sweet ?? 0),
+    sour: Number(drink.sour ?? 0),
+    fruit: Number(drink.fruit ?? 0),
+    bitter: Number(drink.bitter ?? 0),
+    herb: Number(drink.herb ?? 0),
+    fresh: Number(drink.fresh ?? 0),
+    creamy: Number(drink.creamy ?? 0),
+    spicy: Number(drink.spicy ?? 0),
+    spritzig: Number(drink.spritzig ?? 0),
+  }));
+}
+
 export const Cocktails = (): JSX.Element => {
   const navigate = useNavigate();
   const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
+  const [cocktailCatalog, setCocktailCatalog] = useState<CatalogDrink[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   const toggleFilter = (filter: string) => {
     setSelectedFilters((prev) =>
-      prev.includes(filter) ? prev.filter((value) => value !== filter) : [...prev, filter],
+      prev.includes(filter)
+        ? prev.filter((value) => value !== filter)
+        : [...prev, filter]
     );
   };
 
+  useEffect(() => {
+    const load = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const drinks = await loadCocktailsFromSupabase();
+        setCocktailCatalog(drinks);
+      } catch (err) {
+        console.error(err);
+        setError("Cocktails konnten nicht aus Supabase geladen werden.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    load();
+  }, []);
+
   const filteredDrinks = useMemo(() => {
     if (selectedFilters.length === 0) return cocktailCatalog;
-    return cocktailCatalog.filter((drink) => selectedFilters.every((filter) => matchesFilter(drink, filter)));
-  }, [selectedFilters]);
+    return cocktailCatalog.filter((drink) =>
+      selectedFilters.every((filter) => matchesFilter(drink, filter))
+    );
+  }, [selectedFilters, cocktailCatalog]);
 
-  const groupedDrinks = useMemo(() => getGroupedCatalogDrinks(filteredDrinks), [filteredDrinks]);
+  const groupedDrinks = useMemo(
+    () => groupCatalogDrinks(filteredDrinks),
+    [filteredDrinks]
+  );
 
   return (
     <div className="w-full h-screen flex justify-center items-center bg-[#121212]">
       <section className="w-[360px] h-[800px] bg-[#121212] overflow-y-auto translate-y-[-1rem] animate-fade-in opacity-0 pt-8">
         <header className="px-4 pt-7 flex items-center gap-3">
-          <Button variant="ghost" onClick={() => navigate('/menu')} className="p-0 hover:bg-transparent">
+          <Button
+            variant="ghost"
+            onClick={() => navigate("/menu")}
+            className="p-0 hover:bg-transparent"
+          >
             <ChevronLeftIcon className="w-[30px] h-[35px] text-white" />
           </Button>
           <h1 className="[font-family:'Roboto',Helvetica] font-medium text-white text-[26px] tracking-[-0.52px] leading-[normal]">
@@ -113,7 +234,9 @@ export const Cocktails = (): JSX.Element => {
                 onClick={() => toggleFilter(tag)}
                 aria-pressed={isSelected}
                 className={`rounded-[8px] px-3 py-[6px] [font-family:'Roboto',Helvetica] font-medium text-base text-white transition-colors ${
-                  isSelected ? 'bg-[#5a0835]' : 'bg-[#8f0f57] hover:bg-[#7a0d4a]'
+                  isSelected
+                    ? "bg-[#5a0835]"
+                    : "bg-[#8f0f57] hover:bg-[#7a0d4a]"
                 }`}
               >
                 {tag}
@@ -123,25 +246,36 @@ export const Cocktails = (): JSX.Element => {
         </div>
 
         <div className="px-4 pt-9 pb-10 flex flex-col gap-8 w-full max-w-[360px]">
-          {groupedDrinks.length === 0 ? (
+          {loading ? (
+            <div className="w-[328px] text-white [font-family:'Roboto',Helvetica] font-light text-sm leading-6">
+              Cocktails werden geladen...
+            </div>
+          ) : error ? (
+            <div className="w-[328px] text-red-300 [font-family:'Roboto',Helvetica] font-light text-sm leading-6">
+              {error}
+            </div>
+          ) : groupedDrinks.length === 0 ? (
             <div className="w-[328px] text-white [font-family:'Roboto',Helvetica] font-light text-sm leading-6">
               Für diese Kombination wurden keine Cocktails gefunden.
             </div>
           ) : (
             groupedDrinks.map(([section, drinks]) => (
-              <section key={section} className="w-[328px] flex flex-col items-start gap-4">
+              <section
+                key={section}
+                className="w-[328px] flex flex-col items-start gap-4"
+              >
                 <h2 className="[font-family:'Roboto',Helvetica] font-bold text-white text-base tracking-[0.32px] leading-[normal] uppercase">
                   {section}
                 </h2>
                 {drinks.map((drink) => (
                   <CocktailCard
-                    key={drink.name}
+                    key={drink.id}
                     name={drink.name}
                     ingredients={drink.ingredients}
                     price={drink.price}
                     onClick={() => {
-                      selectDrink(drink.name, '/cocktails');
-                      navigate('/cocktail-detail');
+                      selectDrink(drink.name, "/cocktails");
+                      navigate("/cocktail-detail");
                     }}
                   />
                 ))}
@@ -153,3 +287,4 @@ export const Cocktails = (): JSX.Element => {
     </div>
   );
 };
+
